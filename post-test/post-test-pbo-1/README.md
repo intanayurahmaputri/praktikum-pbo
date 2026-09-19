@@ -67,32 +67,32 @@ Pengujian program dilakukan pada bagian `if __name__ == "__main__":`. Pengujian 
 
 ### 1. Class Produk
 
-Pada bagian ini dibuat dua objek `Produk`. `produk1` dibuat secara langsung menggunakan constructor, sedangkan `produk2` dibuat menggunakan class method `dari_dict()`. Setelah itu, informasi kedua produk ditampilkan menggunakan `tampilkan_info()`.
+a. Pada bagian ini dibuat dua objek `Produk`. `produk1` dibuat secara langsung menggunakan constructor, sedangkan `produk2` dibuat menggunakan class method `dari_dict()`. Setelah itu, informasi kedua produk ditampilkan menggunakan `tampilkan_info()`.
 
-Selanjutnya dilakukan pengujian terhadap atribut kelas dan method pada `Produk`. Jumlah produk yang sudah dibuat ditampilkan melalui `total_produk_terdaftar`, kemudian nama toko diubah menggunakan `ubah_nama_toko()`.
+b. Selanjutnya dilakukan pengujian terhadap atribut kelas dan method pada `Produk`. Jumlah produk yang sudah dibuat ditampilkan melalui `total_produk_terdaftar`, kemudian nama toko diubah menggunakan `ubah_nama_toko()`.
 
-Static method `validasi_nama_produk()` juga diuji menggunakan nama produk yang valid dan string kosong.
+c. Static method `validasi_nama_produk()` juga diuji menggunakan nama produk yang valid dan string kosong.
 
-Terakhir, property `harga` dan `stok` diuji dengan memasukkan nilai yang valid dan tidak valid. Nilai negatif akan ditolak dan nilai sebelumnya tetap digunakan.
+d. Terakhir, property `harga` dan `stok` diuji dengan memasukkan nilai yang valid dan tidak valid. Nilai negatif akan ditolak dan nilai sebelumnya tetap digunakan.
 
 ### 2. Class Pengguna
 
-Pada bagian `Pengguna`, dibuat dua objek, yaitu `admin1` secara langsung dan `pelanggan1` menggunakan class method `registrasi()`.
+a. Pada bagian `Pengguna`, dibuat dua objek, yaitu `admin1` secara langsung dan `pelanggan1` menggunakan class method `registrasi()`.
 
-Setelah objek dibuat, data pengguna ditampilkan melalui `tampilkan_profil()`. Password yang ditampilkan sudah disamarkan menggunakan karakter `*`.
+b. Setelah objek dibuat, data pengguna ditampilkan melalui `tampilkan_profil()`. Password yang ditampilkan sudah disamarkan menggunakan karakter `*`.
 
-Kemudian class method `info_platform()` digunakan untuk menampilkan informasi platform dan jumlah pengguna. Static method `validasi_password()` juga diuji menggunakan password yang kurang dari 6 karakter dan password yang memenuhi syarat.
+c. Kemudian class method `info_platform()` digunakan untuk menampilkan informasi platform dan jumlah pengguna. Static method `validasi_password()` juga diuji menggunakan password yang kurang dari 6 karakter dan password yang memenuhi syarat.
 
-Pengujian terakhir dilakukan pada property `password`. Password baru yang memenuhi syarat dapat disimpan, sedangkan password `123` ditolak karena jumlah karakternya kurang dari 6.
+d. Pengujian terakhir dilakukan pada property `password`. Password baru yang memenuhi syarat dapat disimpan, sedangkan password `123` ditolak karena jumlah karakternya kurang dari 6.
 
 ### 3. Class Transaksi
 
-Pada bagian ini dibuat dua objek transaksi menggunakan produk dan pengguna yang sudah dibuat sebelumnya. `transaksi1` dibuat secara langsung, sedangkan `transaksi2` dibuat menggunakan class method `buat_transaksi_cepat()`.
+a. Pada bagian ini dibuat dua objek transaksi menggunakan produk dan pengguna yang sudah dibuat sebelumnya. `transaksi1` dibuat secara langsung, sedangkan `transaksi2` dibuat menggunakan class method `buat_transaksi_cepat()`.
 
-Kedua transaksi kemudian diproses menggunakan `proses_transaksi()`. Jika jumlah pembelian valid dan stok mencukupi, stok produk akan berkurang dan total harga transaksi akan dihitung.
+b. Kedua transaksi kemudian diproses menggunakan `proses_transaksi()`. Jika jumlah pembelian valid dan stok mencukupi, stok produk akan berkurang dan total harga transaksi akan dihitung.
 
-Static method `validasi_jumlah()` kemudian diuji menggunakan jumlah pembelian yang valid dan tidak valid.
+c. Static method `validasi_jumlah()` kemudian diuji menggunakan jumlah pembelian yang valid dan tidak valid.
 
-Pengujian berikutnya dilakukan dengan membuat transaksi yang jumlah pembeliannya melebihi stok produk. Transaksi tersebut akan gagal dan dibatalkan karena stok tidak mencukupi.
+d. Pengujian berikutnya dilakukan dengan membuat transaksi yang jumlah pembeliannya melebihi stok produk. Transaksi tersebut akan gagal dan dibatalkan karena stok tidak mencukupi.
 
-Terakhir, property `total_harga` diuji dengan memasukkan nilai yang valid dan nilai negatif. Nilai negatif akan ditolak sehingga nilai total harga sebelumnya tetap dipertahankan.
+e. Terakhir, property `total_harga` diuji dengan memasukkan nilai yang valid dan nilai negatif. Nilai negatif akan ditolak sehingga nilai total harga sebelumnya tetap dipertahankan.
