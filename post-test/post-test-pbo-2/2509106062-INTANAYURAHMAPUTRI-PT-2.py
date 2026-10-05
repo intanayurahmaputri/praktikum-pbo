@@ -142,10 +142,6 @@ class Transaksi:
         print(f"  Jumlah   : {self._jumlah}")
         print(f"  Total    : {Transaksi.mata_uang} {self.total_harga:,.0f}")
 
-    @classmethod
-    def buat_nomor(cls):
-        return f"T{cls.total_transaksi + 1:04d}"
-
     @staticmethod
     def validasi_jumlah(jumlah):
         return isinstance(jumlah, int) and jumlah > 0
@@ -175,6 +171,8 @@ class Transaksi:
 
 
 class Pembelian(Transaksi):
+    jumlah_pembelian = 0
+
     def __init__(self, nomor_transaksi, produk, jumlah, metode_pembayaran):
         super().__init__(nomor_transaksi, produk, jumlah)
         self.metode_pembayaran = metode_pembayaran
@@ -186,12 +184,17 @@ class Pembelian(Transaksi):
         print(f"  Metode Pembayaran : {self.metode_pembayaran}")
         berhasil = super().proses_transaksi()
         if berhasil:
+            Pembelian.jumlah_pembelian += 1
             print("  Detail Pembelian:")
             self.__detail.tampilkan_detail()
         return berhasil
 
     def tandai_lunas(self):
         self.__sudah_dibayar = True
+
+    @classmethod
+    def buat_nomor(cls):
+        return f"T{cls.jumlah_pembelian + 1:04d}"
 
     @property
     def sudah_dibayar(self):
@@ -205,8 +208,8 @@ class Pembelian(Transaksi):
 
 
 class Pembayaran(Transaksi):
-    def __init__(self, nomor_transaksi, pembelian: Pembelian, uang_dibayar):
-        super().__init__(nomor_transaksi, pembelian.produk, pembelian.jumlah)
+    def __init__(self, pembelian: Pembelian, uang_dibayar):
+        super().__init__(pembelian.nomor_transaksi, pembelian.produk, pembelian.jumlah)
         self._pembelian = pembelian
         self.uang_dibayar = uang_dibayar
 
@@ -225,7 +228,6 @@ class Pembayaran(Transaksi):
         self._pembelian.tandai_lunas()
         Transaksi.total_transaksi += 1
         print(f"  [BERHASIL] Pembayaran {self._nomor_transaksi} dikonfirmasi")
-        print(f"      Untuk Pembelian   : {self._pembelian.nomor_transaksi}")
         print(f"      Produk            : {self._produk.nama}")
         print(f"      Metode Pembayaran : {self._pembelian.metode_pembayaran}")
         print(f"      Total             : {Transaksi.mata_uang} {self.total_harga:,.0f}")
@@ -239,7 +241,6 @@ class Pembayaran(Transaksi):
 
     def tampilkan_riwayat(self):
         super().tampilkan_riwayat()
-        print(f"  Untuk    : Pembelian {self._pembelian.nomor_transaksi}")
         print(f"  Dibayar  : {Transaksi.mata_uang} {self.uang_dibayar:,.0f}")
         print(f"  Kembali  : {Transaksi.mata_uang} {self.kembalian:,.0f}")
 
@@ -282,6 +283,16 @@ def bersihkan_layar():
 
 def cetak_garis():
     print("=" * 70)
+
+
+def cetak_tengah(teks, lebar=70):
+    print(teks.center(lebar))
+
+
+def cetak_judul(teks, lebar=70):
+    cetak_garis()
+    cetak_tengah(teks, lebar)
+    cetak_garis()
 
 
 def jeda():
@@ -341,7 +352,8 @@ def pilih_produk(daftar_produk):
         print("\n  Belum ada produk.")
         return None
 
-    print("\n  DAFTAR PRODUK")
+    print()
+    cetak_tengah("DAFTAR PRODUK")
     for nomor, produk in enumerate(daftar_produk, 1):
         print(f"  {nomor}. {produk.nama} ({produk.kategori}) - Rp{produk.harga:,.0f} | Stok {produk.stok}")
 
@@ -358,9 +370,7 @@ def pilih_produk(daftar_produk):
 def menu_produk(toko):
     while True:
         bersihkan_layar()
-        cetak_garis()
-        print("                            KELOLA PRODUK")
-        cetak_garis()
+        cetak_judul("KELOLA PRODUK")
         print("  1. Tambah Produk")
         print("  2. Edit Produk")
         print("  3. Hapus Produk")
@@ -369,7 +379,8 @@ def menu_produk(toko):
         pilihan = input("\n  Pilih menu: ")
 
         if pilihan == "1":
-            print("\n  TAMBAH PRODUK")
+            print()
+            cetak_tengah("TAMBAH PRODUK")
             print("  1. Skincare")
             print("  2. Makeup")
             kategori = input("\n  Pilih kategori: ")
@@ -408,9 +419,7 @@ def menu_produk(toko):
 
             while True:
                 bersihkan_layar()
-                cetak_garis()
-                print("                     EDIT PRODUK")
-                cetak_garis()
+                cetak_judul("EDIT PRODUK")
                 produk.tampilkan_info()
                 print("\n  1. Edit Harga")
                 print("  2. Edit Stok")
@@ -455,9 +464,7 @@ def menu_produk(toko):
 def menu_transaksi(toko, daftar_pembelian, daftar_pembayaran):
     while True:
         bersihkan_layar()
-        cetak_garis()
-        print("                      TRANSAKSI")
-        cetak_garis()
+        cetak_judul("TRANSAKSI")
         print("  1. Pembelian")
         print("  2. Pembayaran")
         print("  3. Lihat Riwayat Transaksi")
@@ -472,7 +479,7 @@ def menu_transaksi(toko, daftar_pembelian, daftar_pembayaran):
 
             jumlah = input_jumlah()
             metode_pembayaran = input("  Metode pembayaran (Tunai/Transfer/E-Wallet): ")
-            transaksi = Pembelian(Transaksi.buat_nomor(), produk, jumlah, metode_pembayaran)
+            transaksi = Pembelian(Pembelian.buat_nomor(), produk, jumlah, metode_pembayaran)
 
             if transaksi.proses_transaksi():
                 daftar_pembelian.append(transaksi)
@@ -485,7 +492,8 @@ def menu_transaksi(toko, daftar_pembelian, daftar_pembayaran):
                 jeda()
                 continue
 
-            print("\n  PEMBELIAN BELUM DIBAYAR")
+            print()
+            cetak_tengah("PEMBELIAN BELUM DIBAYAR")
             for nomor, pembelian in enumerate(belum_lunas, 1):
                 print(f"  {nomor}. {pembelian.nomor_transaksi} - {pembelian.produk.nama} - Rp{pembelian.total_harga:,.0f}")
 
@@ -500,23 +508,23 @@ def menu_transaksi(toko, daftar_pembelian, daftar_pembayaran):
                     print("  [GAGAL] Masukkan angka.")
 
             uang = input_uang()
-            pembayaran = Pembayaran(Transaksi.buat_nomor(), pembelian_dipilih, uang)
+            pembayaran = Pembayaran(pembelian_dipilih, uang)
             if pembayaran.proses_transaksi():
                 daftar_pembayaran.append(pembayaran)
             jeda()
 
         elif pilihan == "3":
             print()
-            cetak_garis()
-            print("                  RIWAYAT TRANSAKSI")
-            cetak_garis()
+            cetak_judul("RIWAYAT TRANSAKSI")
             if not daftar_pembelian and not daftar_pembayaran:
                 print("  Belum ada transaksi.")
             else:
-                print("\n  --- PEMBELIAN ---")
+                print()
+                cetak_tengah("--- PEMBELIAN ---")
                 for transaksi in daftar_pembelian:
                     transaksi.tampilkan_riwayat()
-                print("\n  --- PEMBAYARAN ---")
+                print()
+                cetak_tengah("--- PEMBAYARAN ---")
                 for transaksi in daftar_pembayaran:
                     transaksi.tampilkan_riwayat()
             jeda()
@@ -531,9 +539,7 @@ def menu_transaksi(toko, daftar_pembelian, daftar_pembayaran):
 def menu_informasi():
     while True:
         bersihkan_layar()
-        cetak_garis()
-        print("                    INFORMASI TOKO")
-        cetak_garis()
+        cetak_judul("INFORMASI TOKO")
         print(f"  Nama toko       : {Toko.nama_toko}")
         print(f"  Total produk    : {Produk.total_produk_terdaftar}")
         print(f"  Total transaksi : {Transaksi.total_transaksi}")
@@ -568,9 +574,7 @@ def main():
     while True:
         bersihkan_layar()
         print()
-        cetak_garis()
-        print("                 SISTEM PENJUALAN TOKO KECANTIKAN 💄")
-        cetak_garis()
+        cetak_judul("SISTEM PENJUALAN TOKO KECANTIKAN 💄", 69)
         print("  1. Kelola Produk")
         print("  2. Transaksi")
         print("  3. Lihat Daftar Produk")
